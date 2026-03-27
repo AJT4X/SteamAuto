@@ -37,7 +37,7 @@ if __name__ == "__main__":
                 url = f'https://steamcommunity.com/comment/Clan/post/{groupId}/-1/'
 
                 response = session.post(url,data=data)
-                print(response.json())
+                
                 if (response.status_code == 200) and (response.json().get('success') == True):
                     print(f'{groupId} OK!')
 
