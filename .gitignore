@@ -1,2 +1,4 @@
 git
-backServise.__pycache__
+__pycache__/
+backService/__pycache__/
+*.pyc
