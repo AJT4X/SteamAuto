@@ -41,6 +41,6 @@ if __name__ == "__main__":
                 if (response.status_code == 200) and (response.json().get('success') == True):
                     print(f'{groupId} OK!')
 
-            time.sleep(15)
+            time.sleep(1800)
 
             
