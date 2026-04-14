@@ -1,46 +1,49 @@
 import os
 from curl_cffi import Session
-from backServise.back import Back
 import time
+from backServise.back import Back
+from SteamMain.steamAutoPost import SteamPost
 
-if __name__ == "__main__":
+
+
+if __name__=='__main__':
     core = os.path.dirname(os.path.abspath(__file__))
-    configPath = os.path.join(core,"files",'config.json')
-    congifUpload = Back(configPath,{}).uploadJson()
-    
-    inputUser = str(input('[1] Change Cookies [2] Start Spam'))
-    if inputUser == '1':
-        SLS = str(input('SLS: '))
-        SI = str(input('SI: '))
-        congifUpload['steamCookies']['SLS'] = SLS
-        congifUpload['steamCookies']['SI'] = SI
+    configFile = os.path.join(core,'files','config.json')
+    configUpload = Back(configFile,{}).uploadJson()
+   
 
-        Back(configPath,congifUpload).saveJson()
+    picuserInput = str(input('[1] Change cookies [2] Start Script'))
+
+    lastCommentSendTime = 0
+    lastPushTopicForum = 0
+
+    if picuserInput == "1":
+        SLS = str(input('SLS: '))
+        SI = str(input("SI: "))
+        configUpload['steamCookies']['SLS'] = SLS
+        configUpload['steamCookies']['SI'] = SI
+        Back(configFile,configUpload).saveJson()
     else:
         cookies = {
-            "steamLoginSecure" : congifUpload['steamCookies']['SLS'],
-            "sessionid": congifUpload['steamCookies']['SI']
+
+            "steamLoginSecure" :configUpload['steamCookies']['SLS'],
+            "sessionid" : configUpload['steamCookies']['SI']
         }
         session = Session()
         session.cookies.update(cookies)
-        text = congifUpload.get('text')
-        data = {
-            "comment" : text,
-            "count" : '6',
-            "sessionid" : congifUpload['steamCookies']['SI'],
-            "feature2" : '-1'
-        }
 
-        group = congifUpload.get('groupId')
         while True:
-            for groupId in group:
-                url = f'https://steamcommunity.com/comment/Clan/post/{groupId}/-1/'
+            current_time = time.time()
+            if configUpload['status'].get('GroupCommet') and current_time - lastCommentSendTime > 1800:
+                groupCommentSend = SteamPost(configUpload,session).PostGroupComment()
+                if groupCommentSend == "Ok":
+                    print("Group OK!")
+                    lastCommentSendTime=current_time
 
-                response = session.post(url,data=data)
-                
-                if (response.status_code == 200) and (response.json().get('success') == True):
-                    print(f'{groupId} OK!')
+            if configUpload['status'].get('ForumTopicTrade') and current_time - lastPushTopicForum > 3600:
+                forumPush = SteamPost(configUpload,session).ForumTopicPush()
+                if forumPush =='Ok':
+                    print('forumPush ok!')
+                    lastPushTopicForum = current_time
 
             time.sleep(1800)
-
-            

@@ -1,11 +1,23 @@
 {
+    "status": {
+        "GroupCommet": true,
+        "ForumTopicTrade": false
+    },
     "steamCookies": {
         "SLS": "",
         "SI": ""
     },
-    "text": "",
-    "groupId": [
-        "103582791475570471",
-        "103582791475570456"
-    ]
+    "CommentBlock": {
+        "text": "Я дрочу на головы прохожим и \n хохочу",
+        "groupId": [
+            "103582791475570471",
+            "103582791475570456"
+        ]
+    },
+    "ForumTopicBlock": {
+        "title": "Test",
+        "mainText": "Test",
+        "topicId": "18446744073709551615",
+        "forumId": "3381077"
+    }
 }
