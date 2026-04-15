@@ -25,22 +25,22 @@ if __name__=='__main__':
         Back(configFile,configUpload).saveJson()
     else:
         cookies = {
-
             "steamLoginSecure" :configUpload['steamCookies']['SLS'],
             "sessionid" : configUpload['steamCookies']['SI']
         }
+
         session = Session()
         session.cookies.update(cookies)
 
         while True:
             current_time = time.time()
-            if configUpload['status'].get('GroupCommet') and current_time - lastCommentSendTime > 1800:
+            if configUpload['status'].get('GroupCommet') and current_time - lastCommentSendTime > 1799:
                 groupCommentSend = SteamPost(configUpload,session).PostGroupComment()
                 if groupCommentSend == "Ok":
                     print("Group OK!")
                     lastCommentSendTime=current_time
 
-            if configUpload['status'].get('ForumTopicTrade') and current_time - lastPushTopicForum > 3600:
+            if configUpload['status'].get('ForumTopicTrade') and current_time - lastPushTopicForum > 3599:
                 forumPush = SteamPost(configUpload,session).ForumTopicPush()
                 if forumPush =='Ok':
                     print('forumPush ok!')
